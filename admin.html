@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta name="application-version" content="10">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e7"><title>作品管理 / Luchi Creative</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    :root{--bg:#f4f0e7;--ink:#171714;--muted:#6e6962;--rust:#c84832;--line:#d2cbbf;--panel:#fffcf5}
+    *{box-sizing:border-box}body{background:var(--bg);color:var(--ink);margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:wait;opacity:.55}
+    header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--ink);display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px clamp(20px,5vw,75px)}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:-.04em;font-size:17px}.brand img{width:35px;height:35px}header>a:last-child{font-size:12px;font-weight:700;border-bottom:1px solid var(--ink);padding-bottom:5px}
+    main{width:min(1180px,calc(100% - 42px));margin:0 auto;padding:62px 0 110px}.eyebrow{font-size:11px;letter-spacing:.15em;font-weight:700;color:var(--rust);font-family:monospace}
+    h1{font-size:clamp(53px,8vw,110px);line-height:.96;letter-spacing:-.085em;margin:19px 0 26px}h1 em{font-family:Georgia,serif;font-weight:500;color:var(--rust)}.intro{font-size:14px;line-height:1.9;color:var(--muted);max-width:630px;margin-bottom:35px}
+    .panel{background:var(--panel);border:1px solid var(--line);padding:clamp(22px,4vw,40px);margin-bottom:27px}.panel h2{font-size:23px;letter-spacing:-.05em;margin:0 0 16px}.panel p{font-size:13px;line-height:1.9;color:var(--muted)}
+    .hidden{display:none!important}.field{display:flex;flex-direction:column;gap:8px}.field>label,.field legend{font-size:12px;font-weight:750}.hint{font-size:11px;color:var(--muted);line-height:1.65}.field input:not([type=checkbox]),.field select,.field textarea{width:100%;border:1px solid #bcb6aa;background:#fffefb;color:var(--ink);border-radius:0;padding:13px 14px;outline:0;font-size:14px;min-height:47px}.field textarea{min-height:126px;resize:vertical;line-height:1.8}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--rust);box-shadow:0 0 0 2px rgba(200,72,50,.13)}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:21px}.full{grid-column:span 2}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:24px}.btn{border:1px solid var(--ink);background:var(--ink);color:#fffaf2;padding:13px 21px;font-weight:700;font-size:12px}.btn:hover{background:var(--rust);border-color:var(--rust)}.btn.secondary{background:transparent;color:var(--ink)}.btn.secondary:hover{color:white}.btn.danger{background:#fff3ef;color:#a72c17;border-color:#b64b34}.btn.danger:hover{background:#a72c17;color:white}.checkline{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:650}
+    .notice{padding:13px 16px;border:1px solid var(--line);background:#fffaf1;font-size:12px;line-height:1.8;margin-bottom:18px}.notice.error{color:#942813;border-color:#e9a192}.notice.ok{color:#225f44;border-color:#8cbd9f}
+    .bar{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}.owner-chip{font-size:11px;border:1px solid var(--ink);padding:8px 11px;max-width:100%;overflow-wrap:anywhere}.item-list{display:grid;gap:12px;margin-top:20px}
+    .entry{display:grid;grid-template-columns:88px minmax(0,1fr) auto;gap:15px;align-items:center;border:1px solid var(--line);background:#fffcf5;padding:12px}.entry img,.entry .placeholder{width:88px;height:75px;object-fit:cover;background:#e2d1c0;display:grid;place-items:center;font-size:12px}.entry h3{font-size:15px;margin:0 0 5px}.entry p{margin:0;color:var(--muted);font-size:11px;line-height:1.6}.entry .entry-actions{display:flex;gap:7px}.entry .btn{padding:8px 11px}.pill{display:inline-block;border:1px solid var(--line);padding:3px 6px;margin-left:5px;font-size:10px}.pill.draft{color:#a64330;border-color:#d39d91}.signout{margin-left:auto}.help{border-top:1px solid var(--line);padding-top:15px;margin-top:20px}
+    @media(max-width:720px){main{padding:42px 0 65px}.field-grid{grid-template-columns:1fr}.full{grid-column:auto}.entry{grid-template-columns:56px minmax(0,1fr)}.entry img,.entry .placeholder{width:56px;height:60px}.entry .entry-actions{grid-column:2}.entry h3{font-size:13px}.panel{padding:23px}}
+  
+    /* V6: consistent readable admin typography */
+    body{font-size:16px}
+    header>a:last-child{font-size:15px}
+    .brand{font-size:18px}
+    .eyebrow{font-size:13px}
+    .intro{font-size:18px}
+    .panel p{font-size:16px}
+    .field>label,.field legend{font-size:15px}
+    .hint,.help{font-size:14px;line-height:1.7}
+    .field input,.field select,.field textarea{font-size:16px}
+    .notice{font-size:15px}
+    .btn{font-size:15px}
+    .owner-chip{font-size:13px}
+    .entry p,.entry-actions{font-size:14px}
+
+    .media-upload-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px}.media-upload-head label{font-weight:800;font-size:16px}
+    .upload-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.upload-box{border:1px dashed #b18e7f;background:#faf4ed;display:grid;gap:8px;cursor:pointer;padding:20px;font-weight:800}.upload-box:hover{border-color:#c84832}.upload-box input{width:100%;max-width:100%;font-weight:400;background:transparent!important;border:0!important;padding:0!important;min-height:auto!important}.upload-box.is-hidden{display:none}
+    .media-draft{display:grid;gap:10px;margin-top:14px}.media-item{display:grid;grid-template-columns:76px minmax(0,1fr);gap:14px;border:1px solid #d2cbbf;background:#fffdf7;padding:11px;align-items:start}.media-item img,.media-placeholder{width:76px;height:88px;object-fit:cover;background:#d7cabe}.media-placeholder{display:grid;place-items:center;font-weight:900;color:#55483b;font-size:12px}.media-item-fields{display:grid;gap:7px;min-width:0}.media-item-title{font-weight:750;overflow-wrap:anywhere;font-size:14px}.media-item input[type=text]{padding:10px!important;min-height:38px!important}.media-actions{display:flex;flex-wrap:wrap;gap:5px}.mini-btn{background:#fff;border:1px solid #b8afa2;padding:5px 9px;font-size:12px;cursor:pointer}.mini-btn:hover{border-color:#c84832;color:#c84832}.mini-btn.is-cover{background:#c84832;color:white;border-color:#c84832}.media-item .pending{color:#ae4c31;font-size:12px}.file-count{font-size:14px;color:#6e6962}
+    @media(max-width:680px){.upload-grid{grid-template-columns:1fr}.media-item{grid-template-columns:64px minmax(0,1fr)}.media-item img,.media-placeholder{width:64px;height:80px}.mini-btn{font-size:13px}}
+  </style>
+</head>
+<body>
+  <header><a class="brand" href="index.html"><img src="luchi-logo.svg" alt="">LUCHI / STUDIO ADMIN</a><a href="index.html">↖ 回作品集</a></header>
+  <main>
+    <div class="eyebrow">PRIVATE STUDIO / CONTENT MANAGEMENT</div>
+    <h1>Edit the <em>archive.</em></h1>
+    <p class="intro">這裡是作品管理後台。只有指定的擁有者帳號才能新增照片、上傳影片或附件、編輯說明，以及管理專案。公開訪客只會看到已發佈的作品。</p>
+    <div id="notice" class="notice" role="status" aria-live="polite">正在檢查雲端設定…</div>
+
+    <section id="setupPanel" class="panel hidden"><h2>尚未啟用雲端管理</h2><p>這個網站已經具備完整的登入和上傳程式，但需要先設定你自己的 Supabase 專案，才能真的把檔案儲存在網路上。</p><p>請打開 ZIP 裡的 <strong>README_開始使用.md</strong>，按照步驟設定 <code>supabase-config.js</code> 和 <code>supabase-setup.sql</code>。在設定完成之前，這裡不會假裝上傳成功。</p><a class="btn" href="index.html">回到作品集 ↗</a></section>
+
+    <section id="loginPanel" class="panel hidden"><h2>登入你的工作室</h2><p>使用你在 Supabase Authentication 建立的 Email 與密碼登入。登入後仍會核對管理員 UID。</p>
+      <form id="loginForm" class="field-grid">
+        <div class="field full"><label for="email">Email</label><input required id="email" type="email" autocomplete="username" placeholder="you@example.com"></div>
+        <div class="field full"><label for="password">密碼</label><input required id="password" type="password" autocomplete="current-password" minlength="6" placeholder="輸入你的管理員密碼"></div>
+        <div class="actions full"><button class="btn" id="signInBtn" type="submit">使用 Email 與密碼登入 ↗</button></div>
+      </form>
+      <p class="help">登入成功後仍須符合指定的管理員 UID 才能編輯作品。請勿把密碼提供給任何人。</p>
+    </section>
+
+    <section id="deniedPanel" class="panel hidden"><h2>沒有管理權限</h2><p>你目前已登入，但不是指定的管理者。出於安全考量，這個帳號無法新增、更改、刪除檔案。</p><div class="actions"><button class="btn secondary" id="deniedSignout" type="button">登出，換另一個帳號</button></div></section>
+
+    <div id="editorArea" class="hidden">
+      <div class="bar" style="margin-bottom:23px"><span id="ownerChip" class="owner-chip">VERIFIED OWNER</span><button class="btn secondary signout" type="button" id="signOut">安全登出</button></div>
+      <section class="panel"><div class="eyebrow">01 / ADD OR EDIT</div><h2 id="formHeading">新增作品</h2>
+        <form id="itemForm">
+          <div class="field-grid">
+            <div class="field"><label for="kind">作品類型</label><select id="kind" required><option value="photo">攝影 / Photo</option><option value="video">影片 / Video</option><option value="project">專案 / Project</option></select></div>
+            <div class="field"><label for="category">作品分類</label><select id="category"></select></div>
+            <div class="field full"><label for="title">作品標題 *</label><input id="title" maxlength="150" required placeholder="例如：雨後的台北"></div>
+            <div class="field full"><label for="subtitle">副標題／拍攝地點／作品類型</label><input id="subtitle" maxlength="200" placeholder="台北・街頭攝影 / Taipei, Taiwan"></div>
+            <div class="field full"><label for="description">作品描述 *</label><textarea id="description" required placeholder="攝影：這組照片的整體故事。每張照片還能另填獨立敘述。影片：主題與製作過程。專案：創作理念與成果。"></textarea></div>
+            <div class="field full"><div class="media-upload-head"><label>作品照片與檔案（可一次選多個）</label><span class="hint">一個作品可包含多張照片／多個附件；所有檔案公開展示，僅管理員能上傳</span></div>
+              <div class="upload-grid">
+                <label class="upload-box">＋ 加入照片（可多選）<input type="file" id="galleryFiles" multiple accept="image/jpeg,image/png,image/webp,image/avif"><span class="hint">JPG / PNG / WebP / AVIF；每張 ≤ 15 MB</span></label>
+                <label class="upload-box" id="extraUploadBox">＋ 加入影片／PDF／ZIP（可多選）<input type="file" id="extraFiles" multiple accept="video/mp4,video/webm,application/pdf,application/zip,.pdf,.zip,.mp4,.webm"><span class="hint">影片每個 ≤ 45 MB，PDF / ZIP 每個 ≤ 10 MB</span></label>
+              </div>
+              <p class="hint">攝影作品：至少一張照片。每張可輸入獨立敘述、設定封面與調整順序；編輯作品時可以繼續追加照片。最多 100 個檔案。</p>
+              <div id="mediaDraft" class="media-draft" aria-live="polite"></div>
+            </div>
+            <div class="field"><label for="externalUrl">外部連結（選填）</label><input type="url" id="externalUrl" placeholder="https://youtu.be/... 或作品網站"></div>
+            <div class="field"><label for="year">年份</label><input type="number" id="year" min="1990" max="2100" value="2026"></div>
+            <div class="field"><label for="role">負責職務（專案用）</label><input id="role" placeholder="導演 / 攝影 / 前端設計"></div>
+            <div class="field"><label for="tools">使用工具（專案用，逗號分隔）</label><input id="tools" placeholder="DaVinci Resolve, Maya, JavaScript"></div>
+            <div class="field full"><label for="notes">更多細節（專案用）</label><textarea id="notes" placeholder="製作過程、遇到的問題、解決方式或成果摘要。"></textarea></div>
+            <div class="field"><label for="order">排序（越大越前面）</label><input id="order" type="number" value="0" step="1"></div>
+            <div class="field"><label class="checkline" style="margin-top:35px"><input type="checkbox" id="published" checked> 立即發佈（關閉則為草稿）</label></div>
+          </div>
+          <div class="actions"><button class="btn" id="saveBtn" type="submit">儲存作品 / 上傳檔案 ↗</button><button type="button" class="btn secondary" id="resetBtn">清空並新增另一筆</button></div>
+          <p class="hint">上傳完成後會顯示在作品集。同一個作品內的照片／附件可以追加、排序、更換封面或刪除，不必重建作品。</p>
+        </form>
+      </section>
+      <section class="panel"><div class="eyebrow">02 / MANAGE ARCHIVE</div><div class="bar"><h2>管理已上傳作品</h2><button class="btn secondary" id="refreshBtn" type="button">重新整理 ↻</button></div><p>編輯標題、照片故事與專案內容；也能先存草稿，再決定是否發佈。</p><div id="itemList" class="item-list" aria-live="polite"></div></section>
+    </div>
+  </main>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
