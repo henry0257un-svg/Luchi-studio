@@ -401,3 +401,11 @@ body{font-size:var(--body-readable)}
 .video-dialog{max-height:90vh;overflow-y:auto}.video-modal-details{max-height:none}
 .modal-panel{max-height:92vh;overflow-y:auto}
 @media(max-width:700px){.extra-media-grid{grid-template-columns:1fr}.album-count{font-size:11px}.album-thumb{width:55px;height:52px}.lightbox-figure>img{max-height:calc(100dvh - 330px)}.album-thumbs{padding-bottom:6px}.extra-media-card p{font-size:14px}}
+
+/* V12：攝影作品詳細視窗專屬的外部作品連結 */
+.photo-external-link{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;padding:11px 18px;min-height:44px;width:max-content;max-width:100%;border:1px solid rgba(248,244,233,.58);border-radius:2px;color:#f8f4e9;font-size:13px;letter-spacing:.03em;font-weight:700;text-decoration:none;transition:background .2s,color .2s,border-color .2s}
+.photo-external-link:hover,.photo-external-link:focus-visible{background:#f8f4e9;color:#191919;border-color:#f8f4e9}
+.photo-external-link:focus-visible{outline:2px solid #e3cbb1;outline-offset:3px}
+.photo-external-link[hidden]{display:none!important}
+.lightbox-figure.has-external-link>img{max-height:calc(100% - 210px)}
+@media(max-width:760px){.photo-external-link{font-size:12px;padding:10px 14px;margin-top:12px}.lightbox-figure.has-external-link>img{max-height:calc(100dvh - 385px)}}

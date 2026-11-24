@@ -96,6 +96,17 @@
       document.getElementById('lightboxTitle').textContent=album.title;
       document.getElementById('lightboxSubtitle').textContent=(album.info||'')+(album.demo?' — DEMO / 示範圖片':'');
       document.getElementById('lightboxDescription').textContent=photo.description||album.description||'尚未填寫照片描述。';
+      // V12: 攝影相簿的外部網址只會在詳細視窗中出現，未設定時完全隱藏。
+      const externalLink=document.getElementById('lightboxExternalLink');
+      let externalUrl='';
+      try {
+        const rawUrl=String(album.externalUrl||'').trim();
+        if(rawUrl){const parsed=new URL(rawUrl);if(['https:','http:'].includes(parsed.protocol))externalUrl=parsed.href;}
+      } catch {} // 不合法的網址不顯示連結按鈕
+      externalLink.hidden=!externalUrl;
+      if(externalUrl)externalLink.href=externalUrl;
+      else externalLink.removeAttribute('href');
+      photoLightbox.querySelector('.lightbox-figure').classList.toggle('has-external-link',Boolean(externalUrl));
       document.getElementById('lightboxNum').textContent=`${currentPhoto+1} / ${photos.length}`;
       const thumbs=document.getElementById('photoThumbs');if(thumbs){thumbs.replaceChildren();thumbs.hidden=photos.length<=1;
         photos.forEach((m,i)=>{const b=el('button','album-thumb'+(i===currentPhoto?' active':''));b.type='button';b.setAttribute('aria-label',`切換到第 ${i+1} 張照片`);
@@ -247,7 +258,7 @@
       const gallery=x=>Array.isArray(x.media_items)&&x.media_items.length?x.media_items.filter(m=>m.url):[];
       const livePhotos=records.filter(x=>x.kind==='photo' && (x.cover_url||gallery(x).some(m=>m.type==='image'))).map(x=>{
         const images=gallery(x).filter(m=>m.type==='image');
-        return {src:x.cover_url||images[0]?.url,title:x.title,category:x.category||'details',info:x.subtitle||'',description:x.description||'',images, demo:false};
+        return {src:x.cover_url||images[0]?.url,title:x.title,category:x.category||'details',info:x.subtitle||'',description:x.description||'',externalUrl:x.external_url||'',images, demo:false};
       });
       const liveVideos=records.filter(x=>x.kind==='video').map(x=>{
         const media=gallery(x),firstVideo=media.find(m=>m.type==='video');
